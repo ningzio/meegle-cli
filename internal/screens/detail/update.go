@@ -52,12 +52,12 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 		return meegle.ToggleSubTaskDoneCmd(appModel.Client, reqID, typed.taskID, typed.subTaskID, typed.done)
 	}
 
-	if typed, ok := msg.(store.SubTaskCreatedMsg); ok {
+	if typed, ok := msg.(meegle.SubTaskCreatedMsg); ok {
 		if typed.Err == nil && typed.TaskID == s.taskID {
 			s.setItems(appModel)
 		}
 	}
-	if typed, ok := msg.(store.SubTaskToggledMsg); ok {
+	if typed, ok := msg.(meegle.SubTaskToggledMsg); ok {
 		if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqToggleSubTask, typed.ReqID) {
 			return func() tea.Msg {
 				return app.ToastMsg{Text: "Failed to update subtask: " + typed.Err.Error(), Kind: app.ToastError}

@@ -40,7 +40,7 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 		return meegle.FetchTasksCmd(appModel.Client, reqID)
 	}
 
-	if typed, ok := msg.(store.TasksFetchedMsg); ok {
+	if typed, ok := msg.(meegle.TasksFetchedMsg); ok {
 		s.loading = false
 		if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqFetchTasks, typed.ReqID) {
 			return func() tea.Msg {
@@ -51,7 +51,7 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 			s.setItems(appModel)
 		}
 	}
-	if typed, ok := msg.(store.TaskCreatedMsg); ok {
+	if typed, ok := msg.(meegle.TaskCreatedMsg); ok {
 		if typed.Err == nil {
 			s.setItems(appModel)
 		}

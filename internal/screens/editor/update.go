@@ -32,7 +32,7 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 	}
 
 	switch typed := msg.(type) {
-	case store.TaskCreatedMsg:
+	case meegle.TaskCreatedMsg:
 		if s.mode == ModeTask {
 			s.submitting = false
 			if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqCreateTask, typed.ReqID) {
@@ -44,7 +44,7 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 				return func() tea.Msg { return app.PopScreenMsg{} }
 			}
 		}
-	case store.SubTaskCreatedMsg:
+	case meegle.SubTaskCreatedMsg:
 		if s.mode == ModeSubTask {
 			s.submitting = false
 			if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqCreateSubTask, typed.ReqID) {
