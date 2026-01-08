@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 
 	"meegle-cli/internal/app"
+	"meegle-cli/internal/meegle"
 	"meegle-cli/internal/screens/editor"
 	"meegle-cli/internal/store"
 )
@@ -38,14 +39,17 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 					ConfirmText: "y",
 					CancelText:  "n",
 					Danger:      item.subTask.Done,
-					OnConfirm: app.TriggerToggleSubTaskMsg{
-						TaskID:    s.taskID,
-						SubTaskID: item.subTask.ID,
-						Done:      nextDone,
+					OnConfirm: toggleSubTaskMsg{
+						taskID:    s.taskID,
+						subTaskID: item.subTask.ID,
+						done:      nextDone,
 					},
 				}
 			}
 		}
+	case toggleSubTaskMsg:
+		reqID := store.NextReqID(&appModel.Store, store.ReqToggleSubTask)
+		return meegle.ToggleSubTaskDoneCmd(appModel.Client, reqID, typed.taskID, typed.subTaskID, typed.done)
 	}
 
 	if typed, ok := msg.(store.SubTaskCreatedMsg); ok {
@@ -54,6 +58,11 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 		}
 	}
 	if typed, ok := msg.(store.SubTaskToggledMsg); ok {
+		if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqToggleSubTask, typed.ReqID) {
+			return func() tea.Msg {
+				return app.ToastMsg{Text: "Failed to update subtask: " + typed.Err.Error(), Kind: app.ToastError}
+			}
+		}
 		if typed.Err == nil && typed.TaskID == s.taskID {
 			s.setItems(appModel)
 		}

@@ -13,6 +13,12 @@ type Screen struct {
 	list   list.Model
 }
 
+type toggleSubTaskMsg struct {
+	taskID    string
+	subTaskID string
+	done      bool
+}
+
 type subTaskItem struct {
 	subTask meegle.SubTask
 }

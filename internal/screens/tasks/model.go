@@ -4,7 +4,6 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"meegle-cli/internal/app"
 	"meegle-cli/internal/meegle"
 )
 
@@ -13,6 +12,8 @@ type Screen struct {
 	loading bool
 	errText string
 }
+
+type fetchTasksMsg struct{}
 
 type taskItem struct {
 	task meegle.Task
@@ -38,5 +39,5 @@ func NewScreen() *Screen {
 func (s *Screen) ID() string { return "tasks" }
 
 func (s *Screen) Init() tea.Cmd {
-	return func() tea.Msg { return app.TriggerFetchTasksMsg{} }
+	return func() tea.Msg { return fetchTasksMsg{} }
 }

@@ -7,6 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 
 	"meegle-cli/internal/app"
+	"meegle-cli/internal/meegle"
 	"meegle-cli/internal/screens/detail"
 	"meegle-cli/internal/screens/editor"
 	"meegle-cli/internal/store"
@@ -31,13 +32,21 @@ func (s *Screen) Update(msg tea.Msg, appModel *app.Model) tea.Cmd {
 				return func() tea.Msg { return app.PushScreenMsg{Screen: detail.NewScreen(selected)} }
 			}
 		case app.KeyRefresh:
-			s.loading = true
-			return func() tea.Msg { return app.TriggerFetchTasksMsg{} }
+			return func() tea.Msg { return fetchTasksMsg{} }
 		}
+	case fetchTasksMsg:
+		s.loading = true
+		reqID := store.NextReqID(&appModel.Store, store.ReqFetchTasks)
+		return meegle.FetchTasksCmd(appModel.Client, reqID)
 	}
 
 	if typed, ok := msg.(store.TasksFetchedMsg); ok {
 		s.loading = false
+		if typed.Err != nil && store.IsLatest(appModel.Store, store.ReqFetchTasks, typed.ReqID) {
+			return func() tea.Msg {
+				return app.ToastMsg{Text: "Failed to fetch tasks: " + typed.Err.Error(), Kind: app.ToastError}
+			}
+		}
 		if typed.Err == nil {
 			s.setItems(appModel)
 		}

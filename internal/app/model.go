@@ -84,44 +84,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case GoToScreenMsg:
 		m.Router.GoTo(typed.Screen)
 		cmds = append(cmds, typed.Screen.Init())
-	case TriggerFetchTasksMsg:
-		reqID := store.NextReqID(&m.Store, store.ReqFetchTasks)
-		cmds = append(cmds, meegle.FetchTasksCmd(m.Client, reqID))
-	case TriggerCreateTaskMsg:
-		reqID := store.NextReqID(&m.Store, store.ReqCreateTask)
-		cmds = append(cmds, meegle.CreateTaskCmd(m.Client, reqID, typed.Name))
-	case TriggerCreateSubTaskMsg:
-		reqID := store.NextReqID(&m.Store, store.ReqCreateSubTask)
-		cmds = append(cmds, meegle.CreateSubTaskCmd(m.Client, reqID, typed.TaskID, typed.Name))
-	case TriggerToggleSubTaskMsg:
-		reqID := store.NextReqID(&m.Store, store.ReqToggleSubTask)
-		cmds = append(cmds, meegle.ToggleSubTaskDoneCmd(m.Client, reqID, typed.TaskID, typed.SubTaskID, typed.Done))
 	}
 
 	m.Store = store.Reduce(m.Store, msg)
-
-	switch typed := msg.(type) {
-	case store.TasksFetchedMsg:
-		if typed.Err != nil {
-			m.Toast, toastCmd = m.Toast.Show("Failed to fetch tasks: "+typed.Err.Error(), toast.Error)
-			cmds = append(cmds, toastCmd)
-		}
-	case store.TaskCreatedMsg:
-		if typed.Err != nil {
-			m.Toast, toastCmd = m.Toast.Show("Failed to create task: "+typed.Err.Error(), toast.Error)
-			cmds = append(cmds, toastCmd)
-		}
-	case store.SubTaskCreatedMsg:
-		if typed.Err != nil {
-			m.Toast, toastCmd = m.Toast.Show("Failed to create subtask: "+typed.Err.Error(), toast.Error)
-			cmds = append(cmds, toastCmd)
-		}
-	case store.SubTaskToggledMsg:
-		if typed.Err != nil {
-			m.Toast, toastCmd = m.Toast.Show("Failed to update subtask: "+typed.Err.Error(), toast.Error)
-			cmds = append(cmds, toastCmd)
-		}
-	}
 
 	if current := m.Router.Current(); current != nil {
 		cmds = append(cmds, current.Update(msg, &m))

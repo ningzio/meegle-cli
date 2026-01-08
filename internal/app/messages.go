@@ -28,20 +28,3 @@ type ShowConfirmMsg struct {
 	Danger      bool
 	OnConfirm   tea.Msg
 }
-
-type TriggerFetchTasksMsg struct{}
-
-type TriggerCreateTaskMsg struct {
-	Name string
-}
-
-type TriggerCreateSubTaskMsg struct {
-	TaskID string
-	Name   string
-}
-
-type TriggerToggleSubTaskMsg struct {
-	TaskID    string
-	SubTaskID string
-	Done      bool
-}
