@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 
 	"meegle-cli/internal/store"
@@ -22,10 +23,10 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (a *App) handleGlobal(msg tea.Msg) (tea.Cmd, bool) {
 	switch m := msg.(type) {
 	case tea.KeyMsg:
-		if a.KeyMap.Quit.Matches(m) {
+		if key.Matches(m, a.KeyMap.Quit) {
 			return tea.Quit, true
 		}
-		if a.KeyMap.Back.Matches(m) {
+		if key.Matches(m, a.KeyMap.Back) {
 			return a.Router.Pop(a), true
 		}
 	}
