@@ -40,3 +40,7 @@ func New(config Config, cmds *meegle.Cmds) *App {
 func (a *App) Init() tea.Cmd {
 	return a.Router.Current().Init(a)
 }
+
+func (a *App) StoreState() store.State {
+	return a.Store
+}

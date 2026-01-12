@@ -3,7 +3,7 @@ package tasks
 import (
 	tea "github.com/charmbracelet/bubbletea"
 
-	"meegle-cli/internal/app"
+	"meegle-cli/internal/screen"
 )
 
 type Model struct {
@@ -14,12 +14,12 @@ func New() *Model {
 	return &Model{Loading: true}
 }
 
-func (m *Model) Init(app *app.App) tea.Cmd {
+func (m *Model) Init(app screen.AppModel) tea.Cmd {
 	return nil
 }
 
-func (m *Model) OnFocus(app *app.App) tea.Cmd {
+func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
 	return nil
 }
 
-func (m *Model) OnBlur(app *app.App) {}
+func (m *Model) OnBlur(app screen.AppModel) {}

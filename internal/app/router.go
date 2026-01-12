@@ -1,36 +1,31 @@
 package app
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	tea "github.com/charmbracelet/bubbletea"
 
-type Screen interface {
-	Init(app *App) tea.Cmd
-	Update(app *App, msg tea.Msg) tea.Cmd
-	View(app *App) string
-
-	OnFocus(app *App) tea.Cmd
-	OnBlur(app *App)
-}
+	"meegle-cli/internal/screen"
+)
 
 type Router struct {
-	stack []Screen
+	stack []screen.Screen
 }
 
-func NewRouter(initial Screen) *Router {
-	return &Router{stack: []Screen{initial}}
+func NewRouter(initial screen.Screen) *Router {
+	return &Router{stack: []screen.Screen{initial}}
 }
 
-func (r *Router) Current() Screen {
+func (r *Router) Current() screen.Screen {
 	return r.stack[len(r.stack)-1]
 }
 
-func (r *Router) Push(app *App, screen Screen) tea.Cmd {
+func (r *Router) Push(app screen.AppModel, next screen.Screen) tea.Cmd {
 	current := r.Current()
 	current.OnBlur(app)
-	r.stack = append(r.stack, screen)
-	return screen.OnFocus(app)
+	r.stack = append(r.stack, next)
+	return next.OnFocus(app)
 }
 
-func (r *Router) Pop(app *App) tea.Cmd {
+func (r *Router) Pop(app screen.AppModel) tea.Cmd {
 	if len(r.stack) <= 1 {
 		return nil
 	}
@@ -41,9 +36,9 @@ func (r *Router) Pop(app *App) tea.Cmd {
 	return r.Current().OnFocus(app)
 }
 
-func (r *Router) Replace(app *App, screen Screen) tea.Cmd {
+func (r *Router) Replace(app screen.AppModel, next screen.Screen) tea.Cmd {
 	current := r.Current()
 	current.OnBlur(app)
-	r.stack[len(r.stack)-1] = screen
-	return screen.OnFocus(app)
+	r.stack[len(r.stack)-1] = next
+	return next.OnFocus(app)
 }
