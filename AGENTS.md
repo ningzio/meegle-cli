@@ -17,10 +17,19 @@ This repository contains a Go-based TUI (Bubble Tea) application. The architectu
 - `internal/store/`: domain state, messages, reducers.
 - `internal/meegle/`: API client, auth, and command factory stubs.
 
-## Testing & Checks
-Run these before every commit:
-- `golangci-lint run`
-- `go build ./...`
+## Coding Standards
+- **Architecture**: Strictly follow Clean Architecture and MVU (Model-View-Update) principles.
+- **Separation of Concerns**: Ensure logic is separated into correct layers (Entities -> Use Cases -> Adapters).
+- **State Management**: All state mutations must occur within reducers (`internal/store`).
+
+## Testing
+- **Coverage**: All code changes must include tests. Aim for **100% test coverage**.
+- **Execution**: Run tests using `go test ./...` before submitting.
+
+## Linting
+- **Tool**: Use `golangci-lint` version **v2.7+**.
+- **Configuration**: The project uses a comprehensive `.golangci.yml`. ensure all linters pass.
+- **Command**: Run `golangci-lint run` to verify your code.
 
 ## Design Guidelines
 - State mutations only in reducers (`internal/store/reducers.go`).

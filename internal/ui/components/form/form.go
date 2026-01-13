@@ -1,6 +1,10 @@
 package form
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
 
 // Model represents a labeled form with multiple fields.
 type Model struct {
@@ -23,9 +27,10 @@ func New(title string) Model {
 // View renders the form as a string.
 func (m Model) View() string {
 	style := lipgloss.NewStyle().Padding(1, 2)
-	content := m.Title
+	var content strings.Builder
+	content.WriteString(m.Title)
 	for _, field := range m.Fields {
-		content += "\n" + field.Label + ": " + field.Value
+		content.WriteString("\n" + field.Label + ": " + field.Value)
 	}
-	return style.Render(content)
+	return style.Render(content.String())
 }

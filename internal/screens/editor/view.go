@@ -2,8 +2,7 @@ package editor
 
 import "meegle-cli/internal/screen"
 
-// View renders the editor prompt and input control.
-func (m *Model) View(app screen.AppModel) string {
+func (m *Model) View(_ screen.AppModel) string {
 	title := "Create Task"
 	if m.Mode == ModeSubTask {
 		title = "Create Subtask"

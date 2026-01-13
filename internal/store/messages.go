@@ -64,8 +64,7 @@ type SubTaskSelectedMsg struct {
 	SubTaskID string
 }
 
-// ApiErrorMsg captures an API error scoped to a request.
-type ApiErrorMsg struct {
+type APIErrorMsg struct {
 	ReqID int64
 	Err   error
 	Scope string

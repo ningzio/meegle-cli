@@ -40,15 +40,12 @@ func newEditor(mode Mode, placeholder string) *Model {
 	return &Model{Input: input, Mode: mode}
 }
 
-// Init prepares the editor for first render.
-func (m *Model) Init(app screen.AppModel) tea.Cmd {
+func (m *Model) Init(_ screen.AppModel) tea.Cmd {
 	return textinput.Blink
 }
 
-// OnFocus refreshes the editor when the screen gains focus.
-func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
+func (m *Model) OnFocus(_ screen.AppModel) tea.Cmd {
 	return textinput.Blink
 }
 
-// OnBlur handles editor teardown when the screen loses focus.
-func (m *Model) OnBlur(app screen.AppModel) {}
+func (m *Model) OnBlur(_ screen.AppModel) {}
