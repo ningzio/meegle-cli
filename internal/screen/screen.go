@@ -16,6 +16,7 @@ type AppModel interface {
 	Push(screen Screen) tea.Cmd
 	Pop() tea.Cmd
 	Replace(screen Screen) tea.Cmd
+	WindowSize() (int, int)
 }
 
 // Screen represents a navigable view in the TUI.

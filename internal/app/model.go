@@ -26,6 +26,8 @@ type App struct {
 	Theme    Theme
 	Config   Config
 	reqID    int64
+	width    int
+	height   int
 }
 
 // New builds a new app model with default dependencies.
@@ -82,4 +84,9 @@ func (a *App) Pop() tea.Cmd {
 // Replace swaps the current screen with another.
 func (a *App) Replace(next screen.Screen) tea.Cmd {
 	return a.Router.Replace(a, next)
+}
+
+// WindowSize returns the current window dimensions.
+func (a *App) WindowSize() (int, int) {
+	return a.width, a.height
 }
