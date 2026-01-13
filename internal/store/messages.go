@@ -53,7 +53,7 @@ type SubTaskSelectedMsg struct {
 	SubTaskID string
 }
 
-type ApiErrorMsg struct {
+type APIErrorMsg struct {
 	ReqID int64
 	Err   error
 	Scope string

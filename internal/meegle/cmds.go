@@ -18,7 +18,7 @@ func NewCmds(client *Client, auth *AuthManager) *Cmds {
 	return &Cmds{client: client, auth: auth}
 }
 
-func (c *Cmds) FetchTasks(projectKey string, reqID int64) tea.Cmd {
+func (c *Cmds) FetchTasks(_ string, reqID int64) tea.Cmd {
 	return func() tea.Msg {
 		tasks := []store.Task{
 			{ID: "task-1", Name: "Design Milestone 1"},
@@ -29,7 +29,7 @@ func (c *Cmds) FetchTasks(projectKey string, reqID int64) tea.Cmd {
 	}
 }
 
-func (c *Cmds) FetchSubTasks(projectKey, taskID string, reqID int64) tea.Cmd {
+func (c *Cmds) FetchSubTasks(_, taskID string, reqID int64) tea.Cmd {
 	return func() tea.Msg {
 		subTasks := []store.SubTask{
 			{ID: fmt.Sprintf("%s-sub-1", taskID), Name: "Draft plan", Status: "open"},
@@ -40,26 +40,30 @@ func (c *Cmds) FetchSubTasks(projectKey, taskID string, reqID int64) tea.Cmd {
 	}
 }
 
-func (c *Cmds) CreateTask(projectKey, name string) tea.Cmd {
+func (c *Cmds) CreateTask(_, name string) tea.Cmd {
 	return func() tea.Msg {
 		return store.TaskCreatedMsg{Task: store.Task{ID: fmt.Sprintf("task-%d", time.Now().UnixNano()), Name: name}}
 	}
 }
 
-func (c *Cmds) CreateSubTask(projectKey, taskID, name string) tea.Cmd {
+func (c *Cmds) CreateSubTask(_, taskID, name string) tea.Cmd {
 	return func() tea.Msg {
-		subTask := store.SubTask{ID: fmt.Sprintf("%s-sub-%d", taskID, time.Now().UnixNano()), Name: name, Status: "open"}
+		subTask := store.SubTask{
+			ID:     fmt.Sprintf("%s-sub-%d", taskID, time.Now().UnixNano()),
+			Name:   name,
+			Status: "open",
+		}
 		return store.SubTaskCreatedMsg{TaskID: taskID, SubTask: subTask}
 	}
 }
 
-func (c *Cmds) CompleteSubTask(projectKey, taskID, subTaskID string) tea.Cmd {
+func (c *Cmds) CompleteSubTask(_, taskID, subTaskID string) tea.Cmd {
 	return func() tea.Msg {
 		return store.SubTaskCompletedMsg{TaskID: taskID, SubTaskID: subTaskID}
 	}
 }
 
-func (c *Cmds) RollbackSubTask(projectKey, taskID, subTaskID string) tea.Cmd {
+func (c *Cmds) RollbackSubTask(_, taskID, subTaskID string) tea.Cmd {
 	return func() tea.Msg {
 		return store.SubTaskRolledBackMsg{TaskID: taskID, SubTaskID: subTaskID}
 	}

@@ -21,7 +21,7 @@ func New() *Model {
 	return &Model{List: subtaskList}
 }
 
-func (m *Model) Init(app screen.AppModel) tea.Cmd {
+func (m *Model) Init(_ screen.AppModel) tea.Cmd {
 	return nil
 }
 
@@ -38,7 +38,7 @@ func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
 	)
 }
 
-func (m *Model) OnBlur(app screen.AppModel) {}
+func (m *Model) OnBlur(_ screen.AppModel) {}
 
 type subTaskItem struct {
 	subTask store.SubTask

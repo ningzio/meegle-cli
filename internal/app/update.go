@@ -21,8 +21,7 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (a *App) handleGlobal(msg tea.Msg) (tea.Cmd, bool) {
-	switch m := msg.(type) {
-	case tea.KeyMsg:
+	if m, ok := msg.(tea.KeyMsg); ok {
 		if key.Matches(m, a.KeyMap.Quit) {
 			return tea.Quit, true
 		}

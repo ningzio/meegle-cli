@@ -22,8 +22,7 @@ func NewOverlays() *Overlays {
 }
 
 func (o *Overlays) Update(msg tea.Msg) tea.Cmd {
-	switch m := msg.(type) {
-	case ToastMsg:
+	if m, ok := msg.(ToastMsg); ok {
 		o.Toast = o.Toast.Show(m.Text, m.Level)
 	}
 
