@@ -1,0 +1,24 @@
+run:
+  timeout: 5m
+  tests: false
+
+linters:
+  enable:
+    - errcheck
+    - cyclop
+    - goconst
+    - gofmt
+    - goimports
+    - gosimple
+    - ineffassign
+    - staticcheck
+    - unused
+
+linters-settings:
+  cyclop:
+    max-complexity: 15
+    package-average: 0.0
+    skip-tests: true
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
