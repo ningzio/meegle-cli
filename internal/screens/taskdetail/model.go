@@ -10,17 +10,18 @@ import (
 
 // Model represents the task detail screen state.
 type Model struct {
-	List list.Model
+	List           list.Model
+	SelectedTaskID string
 }
 
 // New returns a task detail model with default list configuration.
-func New() *Model {
+func New(taskID string) *Model {
 	subtaskList := list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0)
 	subtaskList.Title = "Subtasks"
 	subtaskList.SetShowStatusBar(false)
 	subtaskList.SetFilteringEnabled(false)
 	subtaskList.SetShowHelp(false)
-	return &Model{List: subtaskList}
+	return &Model{List: subtaskList, SelectedTaskID: taskID}
 }
 
 // Init prepares the task detail screen for first render.
@@ -30,15 +31,15 @@ func (m *Model) Init(app screen.AppModel) tea.Cmd {
 
 // OnFocus refreshes subtasks when the screen gains focus.
 func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
-	state := app.StoreState()
-	if state.SelectedTaskID == "" {
+	taskID := m.taskID(app.StoreState())
+	if taskID == "" {
 		return nil
 	}
 
 	reqID := app.NextReqID()
 	return tea.Batch(
-		func() tea.Msg { return store.SubTasksRequestedMsg{ReqID: reqID, TaskID: state.SelectedTaskID} },
-		app.MeegleCmds().FetchSubTasks(app.ProjectKey(), state.SelectedTaskID, reqID),
+		func() tea.Msg { return store.SubTasksRequestedMsg{ReqID: reqID, TaskID: taskID} },
+		app.MeegleCmds().FetchSubTasks(app.ProjectKey(), taskID, reqID),
 	)
 }
 
@@ -62,10 +63,18 @@ func (i subTaskItem) FilterValue() string {
 }
 
 func (m *Model) syncItems(state store.State) {
-	subTasks := state.SubTasksByTaskID[state.SelectedTaskID]
+	taskID := m.taskID(state)
+	subTasks := state.SubTasksByTaskID[taskID]
 	items := make([]list.Item, 0, len(subTasks))
 	for _, subTask := range subTasks {
 		items = append(items, subTaskItem{subTask: subTask})
 	}
 	m.List.SetItems(items)
+}
+
+func (m *Model) taskID(state store.State) string {
+	if m.SelectedTaskID != "" {
+		return m.SelectedTaskID
+	}
+	return state.SelectedTaskID
 }
