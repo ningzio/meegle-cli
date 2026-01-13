@@ -20,7 +20,7 @@ func (m *Model) Update(app screen.AppModel, msg tea.Msg) tea.Cmd {
 		switch msg.String() {
 		case "enter":
 			if item, ok := m.List.SelectedItem().(taskItem); ok {
-				return tea.Batch(
+				return tea.Sequence(
 					func() tea.Msg { return store.TaskSelectedMsg{TaskID: item.task.ID} },
 					app.Push(taskdetail.New()),
 				)
