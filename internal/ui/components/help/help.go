@@ -1,6 +1,10 @@
 package help
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
 
 // Model represents the help overlay state.
 type Model struct {
@@ -20,9 +24,11 @@ func (m Model) View() string {
 	}
 
 	style := lipgloss.NewStyle().Padding(1, 2)
-	content := "Help"
+	var content strings.Builder
+	content.WriteString("Help")
 	for _, line := range m.Lines {
-		content += "\n" + line
+		content.WriteString("\n")
+		content.WriteString(line)
 	}
-	return style.Render(content)
+	return style.Render(content.String())
 }
