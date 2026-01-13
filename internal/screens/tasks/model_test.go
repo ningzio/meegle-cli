@@ -49,11 +49,11 @@ func TestModelInit(t *testing.T) {
 			assert.True(t, ok)
 			assert.Len(t, batch, 2)
 
-			requestMsg, ok := batch[0].(store.TasksRequestedMsg)
+			requestMsg, ok := batch[0]().(store.TasksRequestedMsg)
 			assert.True(t, ok)
 			assert.Equal(t, tc.reqID, requestMsg.ReqID)
 
-			loadedMsg, ok := batch[1].(store.TasksLoadedMsg)
+			loadedMsg, ok := batch[1]().(store.TasksLoadedMsg)
 			assert.True(t, ok)
 			assert.Equal(t, tc.reqID, loadedMsg.ReqID)
 			assert.NotEmpty(t, loadedMsg.Tasks)
@@ -105,7 +105,10 @@ func TestModelUpdateSyncItems(t *testing.T) {
 			items := model.List.Items()
 			assert.Len(t, items, len(tc.wantTitles))
 			for i, title := range tc.wantTitles {
-				assert.Equal(t, title, items[i].Title())
+				item, ok := items[i].(interface{ Title() string })
+				if assert.True(t, ok) {
+					assert.Equal(t, title, item.Title())
+				}
 			}
 		})
 	}

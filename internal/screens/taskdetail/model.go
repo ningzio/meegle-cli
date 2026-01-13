@@ -30,8 +30,14 @@ func (m *Model) Init(_ screen.AppModel) tea.Cmd {
 
 // OnFocus refreshes subtasks when the screen gains focus.
 func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
-	taskID := m.taskID(app.StoreState())
+	state := app.StoreState()
+	taskID := m.taskID(state)
 	if taskID == "" {
+		return nil
+	}
+
+	if len(state.SubTasksByTaskID[taskID]) > 0 {
+		m.syncItems(state)
 		return nil
 	}
 
