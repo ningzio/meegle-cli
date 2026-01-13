@@ -27,7 +27,7 @@ func (a *App) handleGlobal(msg tea.Msg) (tea.Cmd, bool) {
 			return tea.Quit, true
 		}
 		if key.Matches(m, a.KeyMap.Back) {
-			return a.Router.Pop(a), true
+			return a.Pop(), true
 		}
 	}
 
