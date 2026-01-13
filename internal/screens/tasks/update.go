@@ -9,6 +9,7 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Update handles list interactions and navigation for the tasks screen.
 func (m *Model) Update(app screen.AppModel, msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case store.TasksLoadedMsg, store.TaskCreatedMsg:

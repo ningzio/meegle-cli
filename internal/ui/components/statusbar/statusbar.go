@@ -2,15 +2,18 @@ package statusbar
 
 import "github.com/charmbracelet/lipgloss"
 
+// Model represents the status bar content.
 type Model struct {
 	Left  string
 	Right string
 }
 
+// New creates a status bar model with left and right content.
 func New(left, right string) Model {
 	return Model{Left: left, Right: right}
 }
 
+// View renders the status bar within the provided width.
 func (m Model) View(width int) string {
 	style := lipgloss.NewStyle().Padding(0, 1)
 	space := width - lipgloss.Width(m.Left) - lipgloss.Width(m.Right)

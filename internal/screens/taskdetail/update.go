@@ -8,6 +8,7 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Update handles subtask interactions and actions for the detail screen.
 func (m *Model) Update(app screen.AppModel, msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case store.SubTasksLoadedMsg, store.SubTaskCreatedMsg, store.SubTaskCompletedMsg, store.SubTaskRolledBackMsg:

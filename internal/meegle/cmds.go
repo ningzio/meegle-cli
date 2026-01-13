@@ -9,15 +9,18 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Cmds provides Bubble Tea command factories for Meegle operations.
 type Cmds struct {
 	client *Client
 	auth   *AuthManager
 }
 
+// NewCmds constructs a command factory for Meegle requests.
 func NewCmds(client *Client, auth *AuthManager) *Cmds {
 	return &Cmds{client: client, auth: auth}
 }
 
+// FetchTasks returns a command that retrieves tasks for a project.
 func (c *Cmds) FetchTasks(projectKey string, reqID int64) tea.Cmd {
 	return func() tea.Msg {
 		tasks := []store.Task{
@@ -29,6 +32,7 @@ func (c *Cmds) FetchTasks(projectKey string, reqID int64) tea.Cmd {
 	}
 }
 
+// FetchSubTasks returns a command that retrieves subtasks for a task.
 func (c *Cmds) FetchSubTasks(projectKey, taskID string, reqID int64) tea.Cmd {
 	return func() tea.Msg {
 		subTasks := []store.SubTask{
@@ -40,12 +44,14 @@ func (c *Cmds) FetchSubTasks(projectKey, taskID string, reqID int64) tea.Cmd {
 	}
 }
 
+// CreateTask returns a command that creates a new task for a project.
 func (c *Cmds) CreateTask(projectKey, name string) tea.Cmd {
 	return func() tea.Msg {
 		return store.TaskCreatedMsg{Task: store.Task{ID: fmt.Sprintf("task-%d", time.Now().UnixNano()), Name: name}}
 	}
 }
 
+// CreateSubTask returns a command that creates a new subtask for a task.
 func (c *Cmds) CreateSubTask(projectKey, taskID, name string) tea.Cmd {
 	return func() tea.Msg {
 		subTask := store.SubTask{ID: fmt.Sprintf("%s-sub-%d", taskID, time.Now().UnixNano()), Name: name, Status: "open"}
@@ -53,12 +59,14 @@ func (c *Cmds) CreateSubTask(projectKey, taskID, name string) tea.Cmd {
 	}
 }
 
+// CompleteSubTask returns a command that marks a subtask as completed.
 func (c *Cmds) CompleteSubTask(projectKey, taskID, subTaskID string) tea.Cmd {
 	return func() tea.Msg {
 		return store.SubTaskCompletedMsg{TaskID: taskID, SubTaskID: subTaskID}
 	}
 }
 
+// RollbackSubTask returns a command that reopens a previously completed subtask.
 func (c *Cmds) RollbackSubTask(projectKey, taskID, subTaskID string) tea.Cmd {
 	return func() tea.Msg {
 		return store.SubTaskRolledBackMsg{TaskID: taskID, SubTaskID: subTaskID}

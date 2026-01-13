@@ -2,6 +2,7 @@ package app
 
 import "strings"
 
+// View renders the application chrome and current screen output.
 func (a *App) View() string {
 	parts := []string{
 		a.Theme.Header.Render("Meegle TUI"),

@@ -2,6 +2,8 @@ package store
 
 import tea "github.com/charmbracelet/bubbletea"
 
+// Reduce applies a message to the state for the update loop.
+// It is not concurrency-safe and should be called from the Bubble Tea update goroutine.
 func Reduce(s State, msg tea.Msg) State {
 	switch m := msg.(type) {
 	case TasksRequestedMsg:

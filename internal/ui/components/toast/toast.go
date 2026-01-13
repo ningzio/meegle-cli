@@ -2,24 +2,31 @@ package toast
 
 import "github.com/charmbracelet/lipgloss"
 
+// Level identifies the severity of a toast notification.
 type Level string
 
 const (
-	LevelInfo    Level = "info"
-	LevelError   Level = "error"
+	// LevelInfo represents informational toasts.
+	LevelInfo Level = "info"
+	// LevelError represents error toasts.
+	LevelError Level = "error"
+	// LevelSuccess represents success toasts.
 	LevelSuccess Level = "success"
 )
 
+// Model holds the state of a toast notification.
 type Model struct {
 	Message string
 	Level   Level
 	Visible bool
 }
 
+// New returns a hidden toast model.
 func New() Model {
 	return Model{}
 }
 
+// Show returns a visible toast populated with the given message.
 func (m Model) Show(message string, level Level) Model {
 	m.Message = message
 	m.Level = level
@@ -27,6 +34,7 @@ func (m Model) Show(message string, level Level) Model {
 	return m
 }
 
+// View renders the toast if it is visible.
 func (m Model) View() string {
 	if !m.Visible || m.Message == "" {
 		return ""

@@ -7,6 +7,7 @@ import (
 	"meegle-cli/internal/screen"
 )
 
+// View renders the task detail list or an empty-state message.
 func (m *Model) View(app screen.AppModel) string {
 	state := app.StoreState()
 	if state.SelectedTaskID == "" {

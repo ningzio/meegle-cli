@@ -9,6 +9,7 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Update handles editor input and dispatches create actions.
 func (m *Model) Update(app screen.AppModel, msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
