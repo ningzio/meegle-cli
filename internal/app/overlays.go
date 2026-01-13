@@ -6,21 +6,25 @@ import (
 	"meegle-cli/internal/ui/components/toast"
 )
 
+// ToastMsg requests a toast notification to be shown.
 type ToastMsg struct {
 	Text  string
 	Level toast.Level
 }
 
+// Overlays owns transient UI layers like toasts.
 type Overlays struct {
 	Toast toast.Model
 }
 
+// NewOverlays constructs the overlay state with defaults.
 func NewOverlays() *Overlays {
 	return &Overlays{
 		Toast: toast.New(),
 	}
 }
 
+// Update applies overlay-specific messages.
 func (o *Overlays) Update(msg tea.Msg) tea.Cmd {
 	switch m := msg.(type) {
 	case ToastMsg:
@@ -30,6 +34,7 @@ func (o *Overlays) Update(msg tea.Msg) tea.Cmd {
 	return nil
 }
 
+// View renders the active overlays as a string.
 func (o *Overlays) View() string {
 	return o.Toast.View()
 }

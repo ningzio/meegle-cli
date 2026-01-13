@@ -8,10 +8,12 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Model represents the task detail screen state.
 type Model struct {
 	List list.Model
 }
 
+// New returns a task detail model with default list configuration.
 func New() *Model {
 	subtaskList := list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0)
 	subtaskList.Title = "Subtasks"
@@ -21,10 +23,12 @@ func New() *Model {
 	return &Model{List: subtaskList}
 }
 
+// Init prepares the task detail screen for first render.
 func (m *Model) Init(app screen.AppModel) tea.Cmd {
 	return nil
 }
 
+// OnFocus refreshes subtasks when the screen gains focus.
 func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
 	state := app.StoreState()
 	if state.SelectedTaskID == "" {
@@ -38,6 +42,7 @@ func (m *Model) OnFocus(app screen.AppModel) tea.Cmd {
 	)
 }
 
+// OnBlur handles cleanup when the screen loses focus.
 func (m *Model) OnBlur(app screen.AppModel) {}
 
 type subTaskItem struct {
