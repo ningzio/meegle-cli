@@ -9,9 +9,10 @@ func Reduce(s State, msg tea.Msg) State {
 	case TasksRequestedMsg:
 		s.TasksReqID = m.ReqID
 	case TasksLoadedMsg:
-		if m.ReqID != s.TasksReqID {
+		if s.TasksReqID != 0 && m.ReqID != s.TasksReqID {
 			return s
 		}
+		s.TasksReqID = m.ReqID
 		s.Tasks = m.Tasks
 		s.TasksByID = indexTasks(m.Tasks)
 	case TaskCreatedMsg:
@@ -20,9 +21,11 @@ func Reduce(s State, msg tea.Msg) State {
 	case SubTasksRequestedMsg:
 		s.SubTasksReqIDByTask[m.TaskID] = m.ReqID
 	case SubTasksLoadedMsg:
-		if s.SubTasksReqIDByTask[m.TaskID] != m.ReqID {
+		currentReqID := s.SubTasksReqIDByTask[m.TaskID]
+		if currentReqID != 0 && currentReqID != m.ReqID {
 			return s
 		}
+		s.SubTasksReqIDByTask[m.TaskID] = m.ReqID
 		s.SubTasksByTaskID[m.TaskID] = m.SubTasks
 	case SubTaskCreatedMsg:
 		s.SubTasksByTaskID[m.TaskID] = append(s.SubTasksByTaskID[m.TaskID], m.SubTask)
