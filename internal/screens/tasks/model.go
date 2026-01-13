@@ -8,10 +8,12 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Model represents the tasks list screen state.
 type Model struct {
 	List list.Model
 }
 
+// New returns a tasks model with default list configuration.
 func New() *Model {
 	taskList := list.New([]list.Item{}, list.NewDefaultDelegate(), 0, 0)
 	taskList.Title = "Tasks"
@@ -21,6 +23,7 @@ func New() *Model {
 	return &Model{List: taskList}
 }
 
+// Init starts the initial task load for the tasks screen.
 func (m *Model) Init(app screen.AppModel) tea.Cmd {
 	reqID := app.NextReqID()
 	return tea.Batch(

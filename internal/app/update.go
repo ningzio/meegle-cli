@@ -7,9 +7,14 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// Update routes messages through global handlers, reducers, and screens.
 func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if cmd, handled := a.handleGlobal(msg); handled {
 		return a, cmd
+	}
+
+	if sizeMsg, ok := msg.(tea.WindowSizeMsg); ok {
+		a.lastSize = &sizeMsg
 	}
 
 	a.Store = store.Reduce(a.Store, msg)

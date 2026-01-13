@@ -7,6 +7,7 @@ import (
 	"meegle-cli/internal/store"
 )
 
+// AppModel exposes the app services that screens can consume.
 type AppModel interface {
 	StoreState() store.State
 	MeegleCmds() *meegle.Cmds
@@ -17,6 +18,7 @@ type AppModel interface {
 	Replace(screen Screen) tea.Cmd
 }
 
+// Screen represents a navigable view in the TUI.
 type Screen interface {
 	Init(app AppModel) tea.Cmd
 	Update(app AppModel, msg tea.Msg) tea.Cmd
