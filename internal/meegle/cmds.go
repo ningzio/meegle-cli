@@ -27,6 +27,9 @@ func (c *Cmds) FetchTasks(projectKey string, reqID int64) tea.Cmd {
 			{ID: "task-1", Name: "Design Milestone 1"},
 			{ID: "task-2", Name: "Build TUI Skeleton"},
 			{ID: "task-3", Name: "Ship MVP Flow"},
+			{ID: "task-4", Name: "User Onboarding Copy"},
+			{ID: "task-5", Name: "Accessibility Sweep"},
+			{ID: "task-6", Name: "Release Notes Draft"},
 		}
 		return store.TasksLoadedMsg{ReqID: reqID, Tasks: tasks}
 	}
@@ -39,6 +42,8 @@ func (c *Cmds) FetchSubTasks(projectKey, taskID string, reqID int64) tea.Cmd {
 			{ID: fmt.Sprintf("%s-sub-1", taskID), Name: "Draft plan", Status: "open"},
 			{ID: fmt.Sprintf("%s-sub-2", taskID), Name: "Review details", Status: "open"},
 			{ID: fmt.Sprintf("%s-sub-3", taskID), Name: "Execute work", Status: "completed"},
+			{ID: fmt.Sprintf("%s-sub-4", taskID), Name: "QA pass", Status: "open"},
+			{ID: fmt.Sprintf("%s-sub-5", taskID), Name: "Ship checklist", Status: "completed"},
 		}
 		return store.SubTasksLoadedMsg{ReqID: reqID, TaskID: taskID, SubTasks: subTasks}
 	}

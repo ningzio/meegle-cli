@@ -13,6 +13,10 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return a, cmd
 	}
 
+	if sizeMsg, ok := msg.(tea.WindowSizeMsg); ok {
+		a.lastSize = &sizeMsg
+	}
+
 	a.Store = store.Reduce(a.Store, msg)
 
 	screenCmd := a.Router.Current().Update(a, msg)

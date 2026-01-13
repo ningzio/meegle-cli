@@ -1,6 +1,7 @@
 package tasks_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/charmbracelet/bubbletea"
@@ -157,14 +158,19 @@ func TestModelUpdateKeyActions(t *testing.T) {
 
 			msg := cmd()
 			if tc.expectBatch {
-				batch, ok := msg.(tea.BatchMsg)
-				assert.True(t, ok)
-				assert.Len(t, batch, 2)
+				assert.Equal(t, "tea.sequenceMsg", reflect.TypeOf(msg).String())
+				seqValue := reflect.ValueOf(msg)
+				assert.Equal(t, 2, seqValue.Len())
 
-				selectedMsg, ok := batch[0].(store.TaskSelectedMsg)
+				firstCmd, ok := seqValue.Index(0).Interface().(tea.Cmd)
+				assert.True(t, ok)
+				secondCmd, ok := seqValue.Index(1).Interface().(tea.Cmd)
+				assert.True(t, ok)
+
+				selectedMsg, ok := firstCmd().(store.TaskSelectedMsg)
 				assert.True(t, ok)
 				assert.Equal(t, "task-1", selectedMsg.TaskID)
-				assert.IsType(t, pushMsg{}, batch[1])
+				assert.IsType(t, pushMsg{}, secondCmd())
 			} else {
 				assert.IsType(t, pushMsg{}, msg)
 			}

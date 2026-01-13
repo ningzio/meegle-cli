@@ -26,6 +26,7 @@ type App struct {
 	Theme    Theme
 	Config   Config
 	reqID    int64
+	lastSize *tea.WindowSizeMsg
 }
 
 // New builds a new app model with default dependencies.

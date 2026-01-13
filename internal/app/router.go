@@ -27,7 +27,12 @@ func (r *Router) Push(app screen.AppModel, next screen.Screen) tea.Cmd {
 	current := r.Current()
 	current.OnBlur(app)
 	r.stack = append(r.stack, next)
-	return next.OnFocus(app)
+	focusCmd := next.OnFocus(app)
+	if appModel, ok := app.(*App); ok && appModel.lastSize != nil {
+		sizeCmd := next.Update(app, *appModel.lastSize)
+		return tea.Batch(focusCmd, sizeCmd)
+	}
+	return focusCmd
 }
 
 // Pop removes the current screen and focuses the previous one.
@@ -47,5 +52,10 @@ func (r *Router) Replace(app screen.AppModel, next screen.Screen) tea.Cmd {
 	current := r.Current()
 	current.OnBlur(app)
 	r.stack[len(r.stack)-1] = next
-	return next.OnFocus(app)
+	focusCmd := next.OnFocus(app)
+	if appModel, ok := app.(*App); ok && appModel.lastSize != nil {
+		sizeCmd := next.Update(app, *appModel.lastSize)
+		return tea.Batch(focusCmd, sizeCmd)
+	}
+	return focusCmd
 }
