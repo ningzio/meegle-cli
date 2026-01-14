@@ -6,6 +6,7 @@ import "github.com/charmbracelet/bubbles/key"
 type KeyMap struct {
 	Quit key.Binding
 	Back key.Binding
+	Help key.Binding
 }
 
 // DefaultKeyMap returns the default key bindings for navigation.
@@ -18,6 +19,10 @@ func DefaultKeyMap() KeyMap {
 		Back: key.NewBinding(
 			key.WithKeys("esc"),
 			key.WithHelp("esc", "back"),
+		),
+		Help: key.NewBinding(
+			key.WithKeys("?"),
+			key.WithHelp("?", "help"),
 		),
 	}
 }

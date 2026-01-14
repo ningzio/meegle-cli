@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 
+	"meegle-cli/internal/screens/help"
 	"meegle-cli/internal/store"
 )
 
@@ -32,6 +33,9 @@ func (a *App) handleGlobal(msg tea.Msg) (tea.Cmd, bool) {
 		}
 		if key.Matches(m, a.KeyMap.Back) {
 			return a.Pop(), true
+		}
+		if key.Matches(m, a.KeyMap.Help) {
+			return a.Push(help.New()), true
 		}
 	}
 
